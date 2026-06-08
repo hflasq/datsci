@@ -1,0 +1,117 @@
+---
+title: "Lasquite_K-means"
+author: "Hannah Lasquite"
+date: "2026-06-08"
+output: html_document
+---
+
+# Activity 7: K-means Clustering
+
+## A. K-means (single K)
+
+*1.In RStudio, create an R Markdown file. Name it “Your Surname_K-means.rmd.”*
+
+```{r A1, echo = TRUE}
+setwd("C:/Users/Acer/Desktop/LifeDat Projects")
+##This file itself is the first step.
+```
+
+*2. Read in the morphology data as a dataframe.*
+```{r A2, echo = TRUE}
+rawdat <- read.csv("morphology_data.csv")
+```
+
+*3.Remove the sex and population columns.*
+```{r A3, echo = TRUE}
+cleandat <- rawdat[, -c(1,2)]
+```
+
+*4. Ensure that the dataframe has no NAs.*
+```{r A4, echo = TRUE}
+if (any(is.na(cleandat)) == T){print(sum(is.na(cleandat)))}
+#If nothing is printed then we are good to go
+```
+
+*5. Prior to performing K-means, standardize all values using the “scale” function.*
+```{r A5, echo = TRUE}
+scaledat <- scale(cleandat)
+set.seed(63)
+
+```
+
+*6.Perform K-means with 3 cluster centers using 25 initial random centroids*
+```{r A6, echo = TRUE}
+kmeandat <- kmeans(scaledat, centers = 3, nstart = 25)
+```
+
+*7. Show the cluster assignment and a summary of results by simply printing them to the console.*
+```{r A7, echo = TRUE}
+kmeandat
+```
+
+*8. Create a scatter plot with points colored by the assigned cluster.*
+```{r A8, echo = TRUE}
+x <- scaledat[ ,1]
+y <- scaledat[ ,2]
+plot(
+   x, y,
+   col = kmeandat$cluster,
+   pch = 20,
+   xlab = "TD",
+   ylab = "SVL",
+   main = "K-means Clustering of Morphology Data"
+ )
+```
+
+## B. K-means (loop)
+
+*1. Now, create a loop function to perform K-means with cluster centers from 2 to 10.*
+```{r B1, echo = TRUE}
+loopK <- 1:10
+elbloopK <- numeric(length(loopK))
+
+for (i in loopK){
+  multK <- kmeans(scaledat, center = i, nstart = 25)
+  elbloopK[i] <- multK$tot.withinss
+}
+
+
+```
+
+*2. From the output of your loop function, create an elbow curve plot to determine the optimal K.*
+```{r B2, echo = TRUE}
+plot(
+  loopK,
+  elbloopK,
+  xlab = "# of Clusters",
+  ylab = "Total Sum of Squares",
+  main = "Morphology Elbow Plot",
+  lwd = 2,
+  cex = 1.5,
+  pch = 19,
+  type = "b"
+)
+
+##The bend starts to become shallow at 2 clusters
+```
+
+*3. Recreate steps 6–8 above using the optimal K determined by the elbow curve.*
+```{r B3, echo = TRUE}
+#Step 6
+kmeandat2 <- kmeans(scaledat, centers = 2, nstart = 25)
+
+#Step 7
+kmeandat2
+
+#Step 8
+x2 <- scaledat[ ,1]
+y2 <- scaledat[ ,2]
+plot(
+   x2, y2,
+   col = kmeandat2$cluster,
+   pch = 20,
+   xlab = "TD",
+   ylab = "SVL",
+   main = "K-means Clustering of Morphology Data"
+ )
+```
