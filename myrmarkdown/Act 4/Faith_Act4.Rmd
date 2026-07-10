@@ -1,0 +1,71 @@
+---
+title: "Faith_Act4"
+author: "Hannah Lasquite"
+date: "2026-06-01"
+output: html_document
+---
+# A. Read and filter out
+
+*1. Install tidveryse and load.*
+```{r A1, echo = TRUE, warning = TRUE}
+library(tidyverse)
+```
+
+*2. Read in the CSV file as a dataframe.*
+```{r A2, echo = TRUE, warning = TRUE}
+table <- read_csv("habitat_types.csv")
+```
+
+*3. Show the data structure using the tidyverse equivalent of the “str” base R.*
+```{r A3, echo = TRUE, warning = TRUE}
+table |> glimpse()
+str(table)
+```
+
+*4. Subset the data by taking only the following columns:Transect, Hatypes, SmallTrees, and FloweringTrees.*
+```{r A4, echo = TRUE, warning = TRUE}
+sub <- select(table,Transect, Htypes, SmallTrees,FloweringTrees)
+sub
+```
+
+*5. From the subset of data, filter the habitat type “CVT” and sort the “SmallTrees” variable in descending order. Which transect has the most count of small trees, and how many?*
+```{r A5, echo = TRUE, warning = TRUE}
+filtsub <- filter(sub, Htypes == "CVT")
+filtsub
+descSmallTrees <- arrange(filtsub,desc(SmallTrees))
+descSmallTrees
+##The transect with the highest count is IT2P7 & IT3PO (2 top rows) with 10 each
+```
+
+*6. Also, calculate the mean number of flowering trees per habitat type. Which habitat types do not differ significantly in the mean number of flowering trees?*
+```{r A6, echo = TRUE, warning = TRUE}
+sub |>
+group_by(Htypes) |>
+summarize(meanFt = mean(FloweringTrees))
+#CVT is significantly different since ASG and ESG are both ~5.30 flowering trees
+```
+
+*7. In your subset of data (e.g., from step #4), add a new column showing the difference between HerbsCover and GroundCover. Name the new column as “HerbGroundDiff.”  Make sure to assign the output of this step to a new variable called “sel_df_mod.” Are there any transects with no difference? Can you identify at least three transects?*
+```{r A7, echo = TRUE, warning = TRUE}
+sub |>
+mutate(HerbGroundDiff =table$HerbsCover-table$GroundCover) ->self_df_mod
+self_df_mod
+
+nodiff <- self_df_mod |>
+  filter(HerbGroundDiff==0)
+nodiff
+#This filters HerbGround results equal to zero, there are nine. 
+#IT1P5,IT2P5,IT3P1 all have no difference
+```
+
+*8. Convert your self_df_mod output to a wider version (i.e., using pivot_wider). The output should have columns like: SmallTrees_ESG, FloweringTrees_ESG, HerbGroundDiff_ESG, SmallTrees_CVT, FloweringTrees_CVT, etc.*
+```{r A8, echo = TRUE, warning = TRUE}
+wide_self_df_mod <- self_df_mod |> 
+pivot_wider(names_from = Htypes, values_from = c(SmallTrees, FloweringTrees, HerbGroundDiff))
+wide_self_df_mod
+```
+
+# B. Refection
+**How does using tidyverse compare to Activity 03, which primarily used base R? Which functions do you find more intuitive, and which ones are less so?**
+
+*Tidyverse is definitely easier for navigating matrices and dataframes since it has specialized commands for it. Compared to Act 3, which was infinitely more difficult to navigate, the select() function was amazing for trying to highlight the entire row/column of data compared to the hassle in base R. While the looping commands are still useful for specific situations such as infinitely running a code then stopping for a specific condition (for,next, and break commands), for data management I still prefer tidyverse.*
