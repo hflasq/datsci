@@ -12,8 +12,8 @@ Activity 8: https://hflasq.github.io/datsci/myrmarkdown/Act8/Faith_Act8.html
 
 Activity 9: https://hflasq.github.io/datsci/myrmarkdown/Act9/Faith_Act9.html
 
-Activity 10:https://hflasq.github.io/datsci/myrmarkdown/Act10/Faith_Act10.html
+Activity 10: https://hflasq.github.io/datsci/myrmarkdown/Act10/Faith_Act10.html
 
-Activity 11:https://hflasq.github.io/datsci/myrmarkdown/Act11/Faith_Act11.html 
+Activity 11: https://hflasq.github.io/datsci/myrmarkdown/Act11/Faith_Act11.html 
 
-Activity 12:https://hflasq.github.io/datsci/myrmarkdown/Act12/Faith_Act12.html
+Activity 12: https://hflasq.github.io/datsci/myrmarkdown/Act12/Faith_Act12.html
